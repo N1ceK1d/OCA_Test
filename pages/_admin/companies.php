@@ -104,7 +104,7 @@
                         <div class='mb-3 border p-1'>
                             <div class="mb-3 time_access">
                                 <label for="">Количество времени</label>
-                                <input class="form-control" type="datetime-local" class='time_access_value' name="time_count" min='1'>
+                                <input class="form-control" type="datetime-local" min="<?php echo date('Y-m-d\TH:i'); ?>" class='time_access_value' name="time_count" min='1'>
                             </div>
                             <div class="mb-3 question_access">
                                 <label for="">Количество вопросов</label>

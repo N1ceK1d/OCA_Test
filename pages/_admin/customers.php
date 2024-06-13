@@ -47,29 +47,34 @@
                         data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="<?php echo $row['id'];?>"></i><br>
                     </div>
                     <div class="access_info">
-                        <p><b>Количество вопросов:</b> <?php echo getTestCount($row['company_id'], $conn) ?> / <?php echo $row['answers_count']; ?></p>
-                        <p><b>Оставшееся время:</b> <?php
-                        // Установка временной зоны для объекта DateTime
-                        date_default_timezone_set("Europe/Moscow");
+                        <form action="../../php/updateCustomer.php" method='POST'>
+                            <i role="button" class="bi bi-pencil-fill text-primary"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="<?php echo $row['id'];?>"></i>
+                            <p><b>Количество вопросов:</b> <?php echo getTestCount($row['company_id'], $conn) ?> / <?php echo $row['answers_count']; ?></p>
+                            <p><b>Оставшееся время:</b> <?php
+                            // Установка временной зоны для объекта DateTime
+                            date_default_timezone_set("Europe/Moscow");
 
-                        // Создание объекта DateTime для текущего времени
-                        $now = new DateTime();
+                            // Создание объекта DateTime для текущего времени
+                            $now = new DateTime();
 
-                        // Предполагается, что $row['time_count'] содержит дату в формате 'Y-m-d H:i:s'
-                        // Преобразование строки в объект DateTime
-                        $ref = DateTime::createFromFormat('Y-m-d H:i:s', $row['time_count']);
+                            // Предполагается, что $row['time_count'] содержит дату в формате 'Y-m-d H:i:s'
+                            // Преобразование строки в объект DateTime
+                            $ref = DateTime::createFromFormat('Y-m-d H:i:s', $row['time_count']);
 
-                        // Проверка на корректность создания объекта DateTime
-                        if ($ref === false) {
-                            echo "Некорректный формат времени";
-                        } else {
-                            // Вычисление разницы между двумя датами
-                            $diff = $now->diff($ref);
+                            // Проверка на корректность создания объекта DateTime
+                            if ($ref === false) {
+                                echo "Некорректный формат времени";
+                            } else {
+                                // Вычисление разницы между двумя датами
+                                $diff = $now->diff($ref);
 
-                            // Вывод разницы в формате 'Y-m-d H:i:s'
-                            echo $diff->format('%y лет, %m месяцев, %d дней, %h часов, %i минут, %s секунд');
-                        }
-                        ?></p>
+                                // Вывод разницы в формате 'Y-m-d H:i:s'
+                                echo $diff->format('%y лет, %m месяцев, %d дней, %h часов, %i минут, %s секунд');
+                            }
+                            ?></p>
+                            
+                        </form>
                     </div>
                 </div>
             <?php endforeach ?>
@@ -97,8 +102,47 @@
         </div>
     </div>
     <!--Modal End-->
+    <!--Modal Start-->
+    <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Обновить доступ</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="../../php/updateCustomer.php">
+                        <input type="hidden" name="customer_id" value='' class='customer_id'>
+                        <div class='mb-3 border p-1'>
+                            <div class="mb-3 time_access">
+                                <label for="">Количество времени</label>
+                                <input class="form-control" min="<?php echo date('Y-m-d\TH:i'); ?>" type="datetime-local" class='time_access_value' name="time_count">
+                            </div>
+                            <div class="mb-3 question_access">
+                                <label for="">Количество вопросов</label>
+                                <input class="form-control" type="number" class='question_access_value' name="test_count" min='1'>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Обновить</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Modal End-->
     <script>
         var exampleModal = document.getElementById('exampleModal2')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var recipient = button.getAttribute('data-bs-whatever');
+
+            var modalBodyInput = exampleModal.querySelector('.modal-body #recipient-name ')
+            console.log(recipient);
+            exampleModal.querySelector('.modal-body .customer_id').value = recipient;
+        });
+
+        var exampleModal = document.getElementById('exampleModal3')
         exampleModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget
             var recipient = button.getAttribute('data-bs-whatever');
