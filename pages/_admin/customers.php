@@ -31,10 +31,6 @@
         <h1>Анализ характеристик личности</h1>
         <h1>Доступы</h1>
         <?php require("../../php/admin_header.php"); ?>
-        <form class='border w-25 p-2 m-auto text-center' action="../../php/addCompany.php" method="post">
-            <input class='form-control' type="text" name="name" id="" required placeholder='Название компании'>
-            <input class="btn btn-primary my-1" type="submit" value="Добавить">
-        </form>
         <?php
             $res = $conn->query("SELECT * FROM Customers;");    
         ?>
@@ -50,29 +46,41 @@
                         <form action="../../php/updateCustomer.php" method='POST'>
                             <i role="button" class="bi bi-pencil-fill text-primary"
                             data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="<?php echo $row['id'];?>"></i>
-                            <p><b>Количество вопросов:</b> <?php echo getTestCount($row['company_id'], $conn) ?> / <?php echo $row['answers_count']; ?></p>
+                            <p><b>Количество вопросов:</b> <?php
+                            if($row['answers_count'] != null)
+                            {
+                                echo getTestCount($row['company_id'], $conn)." / ".$row['answers_count']; 
+                            } else {
+                                echo "-";
+                            }
+                            ?></p>
                             <p><b>Оставшееся время:</b> <?php
                             // Установка временной зоны для объекта DateTime
-                            date_default_timezone_set("Europe/Moscow");
-
                             // Создание объекта DateTime для текущего времени
                             $now = new DateTime();
 
                             // Предполагается, что $row['time_count'] содержит дату в формате 'Y-m-d H:i:s'
                             // Преобразование строки в объект DateTime
-                            $ref = DateTime::createFromFormat('Y-m-d H:i:s', $row['time_count']);
+                            if ($row['time_count'] != null) {
+                                $ref = DateTime::createFromFormat('Y-m-d H:i:s', $row['time_count']);
+                                // Проверка на корректность создания объекта DateTime
+                                if ($ref === false) {
+                                    echo "Некорректный формат времени";
+                                } else {
+                                    // Если текущее время больше или равно времени события, устанавливаем разницу в ноль
+                                    if ($now >= $ref) {
+                                        echo "00 лет, 00 месяцев, 00 дней, 00 часов, 00 минут, 00 секунд";
+                                    } else {
+                                        // Вычисление разницы между двумя датами
+                                        $diff = $now->diff($ref);
 
-                            // Проверка на корректность создания объекта DateTime
-                            if ($ref === false) {
-                                echo "Некорректный формат времени";
+                                        // Вывод разницы в формате 'Y-m-d H:i:s'
+                                        echo $diff->format('%y лет, %m месяцев, %d дней, %h часов, %i минут, %s секунд');
+                                    }
+                                }
                             } else {
-                                // Вычисление разницы между двумя датами
-                                $diff = $now->diff($ref);
-
-                                // Вывод разницы в формате 'Y-m-d H:i:s'
-                                echo $diff->format('%y лет, %m месяцев, %d дней, %h часов, %i минут, %s секунд');
-                            }
-                            ?></p>
+                                echo "-";
+                            }?></p>
                             
                         </form>
                     </div>
@@ -142,14 +150,14 @@
             exampleModal.querySelector('.modal-body .customer_id').value = recipient;
         });
 
-        var exampleModal = document.getElementById('exampleModal3')
-        exampleModal.addEventListener('show.bs.modal', function (event) {
+        var exampleModal2 = document.getElementById('exampleModal3')
+        exampleModal2.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget
             var recipient = button.getAttribute('data-bs-whatever');
 
-            var modalBodyInput = exampleModal.querySelector('.modal-body #recipient-name ')
+            var modalBodyInput = exampleModal2.querySelector('.modal-body #recipient-name ')
             console.log(recipient);
-            exampleModal.querySelector('.modal-body .customer_id').value = recipient;
+            exampleModal2.querySelector('.modal-body .customer_id').value = recipient;
         });
     </script>
 </body>

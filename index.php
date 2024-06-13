@@ -1,5 +1,7 @@
 <?php
+  session_start();
   require("php/conn.php");
+  require("php/getTestCount.php");
   $res = mysqli_fetch_assoc($conn->query("SELECT * FROM Companies LIMIT 1"));
 
   $company_id = $res['id'];
@@ -8,6 +10,7 @@
   {
     $company_id = base64_decode($_GET['company_id']);
   }
+  $test_count = mysqli_fetch_assoc($conn->query("SELECT * FROM Customers WHERE company_id = $company_id"));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,11 +25,11 @@
 <body>
     <div class="container">
     <?php if(isset($_GET['company_id'])): ?>
+      <?php if(getTestCount($company_id, $conn) > 0 && timeIsEnd($test_count['time_count'])): ?>
         <div class="test-intro p-1 my-1 mx-auto w-75">
             <h1>Тест: Анализ характеристик личности</h1>
             <h2>Как заполнять тест:</h2>
             <div class="helper w-100 border p-1 my-1 mx-auto bg-light rounded">
-              
               <p>
               Время заполнения теста не ограничено, но обычно это занимает 30-40 минут <br><br>
               Важно, чтобы во время заполнения теста, вас ничего не беспокоило и не отвлекало.<br><br>
@@ -92,7 +95,12 @@
             myInput.focus()
           })
         </script>
-        <?php else :?>
+        <?php else: ?>
+          <div class="container">
+            <h2 class='text-center'>На данный момент тест закрыт</h2>
+          </div>
+        <?php endif; ?>
+      <?php else :?>
         <div class="container">
           <h2 class='text-center'>Получите ссылку от руководства</h2>
         </div>

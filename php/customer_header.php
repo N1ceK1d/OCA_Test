@@ -11,29 +11,35 @@
     <div class="access_info border p-1 bg-light">
         <h2><?php echo $res['login']; ?></h2>
         <h3><?php echo $res['company_name']; ?></h3>
-        <p><b>Количество вопросов:</b> <?php echo getTestCount($res['company_id'], $conn) ?>/<?php echo $res['answers_count']; ?></p>
-        <p><b>Оставшееся время:</b> <?php
+        
+        <p><b>Количество вопросов:</b> <?php echo getTestCount($res['company_id'], $conn) ?> / <?php echo $res['answers_count']; ?></p>
+        <p><b>Оставшееся время:</b> <label class='zero_time'><?php
         // Установка временной зоны для объекта DateTime
-        date_default_timezone_set("Europe/Moscow");
-
         // Создание объекта DateTime для текущего времени
         $now = new DateTime();
 
         // Предполагается, что $row['time_count'] содержит дату в формате 'Y-m-d H:i:s'
         // Преобразование строки в объект DateTime
-        $ref = DateTime::createFromFormat('Y-m-d H:i:s', $res['time_count']);
+        if ($res['time_count'] != null) {
+            $ref = DateTime::createFromFormat('Y-m-d H:i:s', $res['time_count']);
+            // Проверка на корректность создания объекта DateTime
+            if ($ref === false) {
+                echo "Некорректный формат времени";
+            } else {
+                // Если текущее время больше или равно времени события, устанавливаем разницу в ноль
+                if ($now >= $ref) {
+                    echo "00 лет, 00 месяцев, 00 дней, 00 часов, 00 минут, 00 секунд";
+                } else {
+                    // Вычисление разницы между двумя датами
+                    $diff = $now->diff($ref);
 
-        // Проверка на корректность создания объекта DateTime
-        if ($ref === false) {
-            echo "Некорректный формат времени";
+                    // Вывод разницы в формате 'Y-m-d H:i:s'
+                    echo $diff->format('%y лет, %m месяцев, %d дней, %h часов, %i минут, %s секунд');
+                }
+            }
         } else {
-            // Вычисление разницы между двумя датами
-            $diff = $now->diff($ref);
-
-            // Вывод разницы в формате 'Y-m-d H:i:s'
-            echo $diff->format('%y лет, %m месяцев, %d дней, %h часов, %i минут, %s секунд');
-        }
-        ?></p>
+            echo "-";
+        }?></label></p>
         <div class="company-item cart w-75 my-1">
             <button type='button' class='btn btn-primary my-1 copied_text_btn liveToastBtn'>Скопировать ссылку</button>
             <?php $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].'?company_id='.urlencode(base64_encode($res['company_id'])); ?>
@@ -66,4 +72,31 @@
         // Показываем поле с URL
         urlField.show();
     });
+
+    $(document).ready(function() {
+
+    function checkConditionsAndToggleButton() {
+        // Получение количества вопросов и оставшегося времени
+        var questionsCount = <?php echo getTestCount($res['company_id'], $conn); ?>;
+        var remainingTime = $('.zero_time').text().trim();
+
+        // Проверка, равно ли количество вопросов нулю
+        var isQuestionsCountZero = questionsCount == 0;
+        
+        // Проверка, равно ли оставшееся время нулю
+        var isTimeZero = remainingTime == "00 лет, 00 месяцев, 00 дней, 00 часов, 00 минут, 00 секунд";
+
+        console.log(questionsCount);
+        console.log(isTimeZero);
+        console.log(isQuestionsCountZero);
+        // Блокировка или разблокировка кнопки на основе условий
+        if (isQuestionsCountZero || isTimeZero) {
+            $('.copied_text_btn').prop('disabled', true);
+        } else {
+            $('.copied_text_btn').prop('disabled', false);
+        }
+    }
+    // Вызов функции при загрузке страницы
+    checkConditionsAndToggleButton();
+});
 </script>

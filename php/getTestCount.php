@@ -13,6 +13,33 @@
         FROM Customers
         INNER JOIN Companies ON Customers.company_id = Companies.id 
         WHERE Customers.id = ".$_SESSION['customer_id']));  
+
         return $res['test_count'] - $test_count;
+    }
+
+    function timeIsEnd($time_count)
+    {
+        $now = new DateTime();
+
+        // Предполагается, что $row['time_count'] содержит дату в формате 'Y-m-d H:i:s'
+        // Преобразование строки в объект DateTime
+        if ($time_count != null) {
+            $ref = DateTime::createFromFormat('Y-m-d H:i:s', $time_count);
+            // Проверка на корректность создания объекта DateTime
+            if ($ref === false) {
+                echo "Некорректный формат времени";
+            } else {
+                // Если текущее время больше или равно времени события, устанавливаем разницу в ноль
+                if ($now >= $ref) {
+                    return false;
+                } else {
+                    // Вычисление разницы между двумя датами
+                    $diff = $now->diff($ref);
+                    return true;
+                }
+            }
+        } else {
+            return true;
+        }
     }
 ?>

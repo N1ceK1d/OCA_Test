@@ -7,8 +7,6 @@
     require("../../php/conn.php");
     require("../../php/showDiagramm.php");
     $company_id = mysqli_fetch_assoc($conn->query("SELECT company_id FROM Customers WHERE id = ".$_SESSION['customer_id']))['company_id'];
-
-
     $sql = "SELECT Users.*, Users.id as user_id, CONCAT(Users.second_name, ' ', Users.first_name) as fullname
     FROM Users
     INNER JOIN UserAnswers ON UserAnswers.user_id = Users.id 
