@@ -5,6 +5,7 @@
         header("Location: login.php");
     }
     require("../../php/conn.php");
+    require("../../php/getTestCount.php");
     $company_id = 0;
     if(isset($_GET['company_id']))
     {
@@ -46,7 +47,7 @@
                         data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="<?php echo $row['id'];?>"></i><br>
                     </div>
                     <div class="access_info">
-                        <p><b>Количество вопросов:</b> 10/<?php echo $row['answers_count']; ?></p>
+                        <p><b>Количество вопросов:</b> <?php echo getTestCount($row['company_id'], $conn) ?> / <?php echo $row['answers_count']; ?></p>
                         <p><b>Оставшееся время:</b> <?php
                         // Установка временной зоны для объекта DateTime
                         date_default_timezone_set("Europe/Moscow");

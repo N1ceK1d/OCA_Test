@@ -5,6 +5,7 @@
         header("Location: login.php");
     }
     require("../../php/conn.php");
+    require("../../php/showDiagramm.php");
     $company_id = mysqli_fetch_assoc($conn->query("SELECT company_id FROM Customers WHERE id = ".$_SESSION['customer_id']))['company_id'];
 
 
