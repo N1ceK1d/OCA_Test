@@ -12,5 +12,11 @@ if ($result->num_rows > 0) {
 $sql = "DELETE FROM Users WHERE id = $user_id";
 if($conn->query($sql))
 {
-    header("Location: ../pages/_admin/employees.php");
+    if(isset($_GET['admin']))
+    {
+        header("Location: ../pages/_admin/employees.php");
+    } if (isset($_GET['customer'])) 
+    {
+        header("Location: ../pages/_customer/index.php");
+    }
 }

@@ -12,7 +12,14 @@
         <h2><?php echo $res['login']; ?></h2>
         <h3><?php echo $res['company_name']; ?></h3>
         
-        <p><b>Количество вопросов:</b> <?php echo getTestCount($res['company_id'], $conn, $_SESSION['customer_id']) ?> / <?php echo $res['answers_count']; ?></p>
+        <p><b>Количество вопросов:</b> <?php 
+        if(mysqli_fetch_assoc($conn->query("SELECT * FROM Customers WHERE company_id = ".$res['company_id']))['answers_count'] != null )
+        {
+            echo getTestCount($res['company_id'], $conn, $_SESSION['customer_id']) ?> / <?php echo $res['answers_count'];
+        } else {
+            echo '-';
+        }
+        ?></p>
         <p><b>Оставшееся время:</b> <label class='zero_time'><?php
         // Установка временной зоны для объекта DateTime
         // Создание объекта DateTime для текущего времени

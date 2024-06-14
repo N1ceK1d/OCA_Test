@@ -13,7 +13,7 @@ function getUserResult($user_id, $username, $gender, $test_time){?>
     </p>
     <?php
     require('conn.php');
-
+    session_start();
     $sql = "SELECT sum(Answers.points) as points, Characteristics.name, Characteristics.characteristic_char FROM UserAnswers
     INNER JOIN Answers ON UserAnswers.answer_id = Answers.id
     INNER JOIN Questions ON UserAnswers.question_id = Questions.id
@@ -59,6 +59,15 @@ function getUserResult($user_id, $username, $gender, $test_time){?>
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="../../php/deleteUser.php">
+                        <?php
+                          if(isset($_SESSION['customer_id'])) 
+                          {
+                            echo "<input type='hidden' name='customer' value='1'>";
+                          } else 
+                          {
+                            echo "<input type='hidden' name='admin' value='1'>";
+                          }
+                        ?>
                         <input type="hidden" name="user_id" value="" class='user_id'>
                         <div class="mb-3">
                             <p>Вы уверены, что хотите удалить данные этого тестируемого?</p>

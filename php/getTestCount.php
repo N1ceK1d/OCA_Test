@@ -9,13 +9,27 @@
         WHERE company_id = $company_id
         GROUP By Users.id 
         ORDER BY test_time;")->num_rows;
-        
-        $res = mysqli_fetch_assoc($conn->query("SELECT Customers.answers_count as test_count
+
+        if(mysqli_fetch_assoc($conn->query("SELECT Customers.answers_count as test_count
         FROM Customers
         INNER JOIN Companies ON Customers.company_id = Companies.id 
-        WHERE Customers.id = $customer_id"));  
+        WHERE Customers.company_id = $company_id"))['test_count'] != null)
+        {
+            $res = mysqli_fetch_assoc($conn->query("SELECT Customers.answers_count as test_count
+            FROM Customers
+            INNER JOIN Companies ON Customers.company_id = Companies.id 
+            WHERE Customers.id = $customer_id"));  
 
-        return $res['test_count'] - $test_count;
+            return $res['test_count'] - $test_count;
+        }
+        return 1;
+        
+        // $res = mysqli_fetch_assoc($conn->query("SELECT Customers.answers_count as test_count
+        // FROM Customers
+        // INNER JOIN Companies ON Customers.company_id = Companies.id 
+        // WHERE Customers.id = $customer_id"));  
+
+        // return $res['test_count'] - $test_count;
     }
 
     function getTestCount2($company_id, $conn) 
@@ -29,12 +43,19 @@
         GROUP By Users.id 
         ORDER BY test_time;")->num_rows;
         
-        $res = mysqli_fetch_assoc($conn->query("SELECT Customers.answers_count as test_count
+        if(mysqli_fetch_assoc($conn->query("SELECT Customers.answers_count as test_count
         FROM Customers
         INNER JOIN Companies ON Customers.company_id = Companies.id 
-        WHERE Customers.company_id = $company_id"));  
-
-        return $res['test_count'] - $test_count;
+        WHERE Customers.company_id = $company_id"))['test_count'] != null)
+        {
+            $res = mysqli_fetch_assoc($conn->query("SELECT Customers.answers_count as test_count
+            FROM Customers
+            INNER JOIN Companies ON Customers.company_id = Companies.id 
+            WHERE Customers.company_id = $company_id"));  
+    
+            return $res['test_count'] - $test_count;
+        }
+        return 1;
     }
 
     function timeIsEnd($time_count)
