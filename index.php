@@ -25,7 +25,7 @@
 <body>
     <div class="container">
     <?php if(isset($_GET['company_id'])): ?>
-      <?php if(getTestCount2($company_id, $conn) > 0 && timeIsEnd($test_count['time_count'])): ?>
+      <?php if((getTestCount2($company_id, $conn) > 0 && timeIsEnd($test_count['time_count'])) || isset($_GET['is_free'])): ?>
         <div class="test-intro p-1 my-1 mx-auto w-75">
             <h1>Тест: Анализ характеристик личности</h1>
             <h2>Как заполнять тест:</h2>
