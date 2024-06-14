@@ -1,6 +1,7 @@
 <?php
-    function getTestCount($company_id, $conn) 
+    function getTestCount($company_id, $conn, $customer_id) 
     {
+        session_start();
         $test_count = $conn->query("SELECT Users.*, Users.id as user_id, CONCAT(Users.second_name, ' ', Users.first_name) as fullname
         FROM Users
         INNER JOIN UserAnswers ON UserAnswers.user_id = Users.id 
@@ -12,7 +13,7 @@
         $res = mysqli_fetch_assoc($conn->query("SELECT Customers.answers_count as test_count
         FROM Customers
         INNER JOIN Companies ON Customers.company_id = Companies.id 
-        WHERE Customers.id = ".$_SESSION['customer_id']));  
+        WHERE Customers.id = $customer_id"));  
 
         return $res['test_count'] - $test_count;
     }

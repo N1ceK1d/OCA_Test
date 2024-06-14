@@ -12,7 +12,7 @@
         <h2><?php echo $res['login']; ?></h2>
         <h3><?php echo $res['company_name']; ?></h3>
         
-        <p><b>Количество вопросов:</b> <?php echo getTestCount($res['company_id'], $conn) ?> / <?php echo $res['answers_count']; ?></p>
+        <p><b>Количество вопросов:</b> <?php echo getTestCount($res['company_id'], $conn, $_SESSION['customer_id']) ?> / <?php echo $res['answers_count']; ?></p>
         <p><b>Оставшееся время:</b> <label class='zero_time'><?php
         // Установка временной зоны для объекта DateTime
         // Создание объекта DateTime для текущего времени
@@ -48,7 +48,7 @@
     </div>
     <nav>
         <a class='btn btn-outline-primary my-1' href="employees.php">Результаты сотрудников</a>
-        <a class='btn btn-outline-danger float-end my-1' href="../../php/exit.php">Выйти</a>
+        <a class='btn btn-outline-danger float-end my-1' href="../../php/exit.php?customer=1">Выйти</a>
     </nav>
 </header>
 <script>

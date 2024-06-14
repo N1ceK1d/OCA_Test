@@ -3,6 +3,6 @@
         <a class='btn btn-outline-primary my-1' href="employees.php">Результаты сотрудников</a>
         <a class='btn btn-outline-primary my-1' href="companies.php">Компании</a>
         <a class='btn btn-outline-primary my-1' href="customers.php">Доступы</a>
-        <a class='btn btn-outline-danger float-end my-1' href="../../php/exit.php">Выйти</a>
+        <a class='btn btn-outline-danger float-end my-1' href="../../php/exit.php?admin=1">Выйти</a>
     </nav>
 </header>

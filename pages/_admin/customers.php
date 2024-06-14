@@ -49,7 +49,7 @@
                             <p><b>Количество вопросов:</b> <?php
                             if($row['answers_count'] != null)
                             {
-                                echo getTestCount($row['company_id'], $conn)." / ".$row['answers_count']; 
+                                echo getTestCount($row['company_id'], $conn, $row['id'])." / ".$row['answers_count']; 
                             } else {
                                 echo "-";
                             }
