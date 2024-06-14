@@ -46,7 +46,9 @@
                     <button type='button' class='btn btn-primary my-1 copied_text_btn liveToastBtn'>Скопировать ссылку</button>
                     <?php $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].'?company_id='.urlencode(base64_encode($row['id'])); ?>
                     <input type="hidden" class='copied_text' value='<?php echo $url ?>'>
-                    <button type='button' class='btn btn-primary my-1' data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="<?php echo $row['id'];?>">Создать доступ</button>
+                    <button type='button' class='btn btn-primary my-1' data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="<?php echo $row['id'];?>"
+                    <?php if($conn->query("SELECT * FROM Customers WHERE company_id = ".$row['id'])->num_rows > 0) {echo "disabled";} ?>>Создать доступ</button>
+                    <input type="text" readonly='true' class='form-control mt-2 my-1' value='<?php echo $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].'/pages/_customer/'; ?>'>
                 </div>
             <?php endforeach ?>
         </div>
